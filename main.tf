@@ -1,6 +1,7 @@
 module "target_group" {
-  source        = "git@github.com:moneysmartco/tf-aws-alb-target-group.git?ref=master"
-  
+  source = "git@github.com:moneysmartco/tf-aws-alb-target-group.git?ref=master"
+  setup  = "${var.setup}"
+
   env           = "${var.env}"
   vpc_id        = "${var.vpc_id}"
   
@@ -16,7 +17,7 @@ module "target_group" {
 
 module "alb_listener_rule" {
   source = "git@github.com:moneysmartco/tf-aws-alb-listener-rule.git?ref=master"
-  
+  setup  = "${var.setup}"
   app_target_group_arn    = "${module.target_group.target_group_arn}"
   
   alb_listener_http_arn   = "${var.alb_listener_http_arn}"

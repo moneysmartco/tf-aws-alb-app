@@ -1,3 +1,7 @@
+variable "setup" {
+  description = "Setup target group and listener rule or not true|false"
+  default = true
+}
 variable "env" {
   default = ""
 }
