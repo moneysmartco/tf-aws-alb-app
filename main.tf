@@ -17,7 +17,7 @@ module "target_group" {
 module "alb_listener_rule" {
   source = "git@github.com:moneysmartco/tf-aws-alb-listener-rule.git?ref=master"
   
-  app_target_group_arn    = "${var.app_target_group_arn}"
+  app_target_group_arn    = "${module.target_group.target_group_arn}"
   
   alb_listener_http_arn   = "${var.alb_listener_http_arn}"
   alb_listener_https_arn  = "${var.alb_listener_https_arn}"

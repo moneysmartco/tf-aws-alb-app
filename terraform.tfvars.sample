@@ -5,7 +5,6 @@ health_check_path = "/_ping"
 # Attach instance or container
 app_target_id = "id-xxx"
 
-app_target_group_arn     = "arn::test"
 alb_listener_http_arn    = "arn::test"
 alb_listener_https_arn   = "arn::test"
 

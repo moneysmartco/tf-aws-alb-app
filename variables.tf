@@ -31,9 +31,6 @@ variable "health_check_port" {
   default = 80
 }
 # Listerner
-variable "app_target_group_arn"     {
-  default = ""
-}
 variable "alb_listener_http_arn"    {
   default = ""
 }
