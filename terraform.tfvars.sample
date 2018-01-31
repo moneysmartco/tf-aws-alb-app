@@ -1,0 +1,25 @@
+# VPC Config
+vpc_id = "vpc-id"
+app_name = "app-name"
+health_check_path = "/_ping"
+# Attach instance or container
+app_target_id = "id-xxx"
+
+app_target_group_arn     = "arn::test"
+alb_listener_http_arn    = "arn::test"
+alb_listener_https_arn   = "arn::test"
+
+domains = [
+  "a.test.com",
+  "b.test.com"
+]
+
+domains_and_urls = {
+  "c.test.com" = "/c*",
+  "d.test.com" = "/d*"
+}
+
+urls = [
+  "/test-url",
+  "/test-url-regex*"
+]

@@ -1,0 +1,17 @@
+## We cannot put these value to terraform.tfvars since this Init process will be trigger before reading the variables
+terraform {
+  backend "s3" {
+    bucket  = "S3_BUCKET_NAME"
+    key     = "ENV/terraform.tfstate"
+    region  = "REGION"
+    encrypt = true
+  }
+}
+
+## Provider
+provider "aws" {
+  region 	= "AWS_REGION"
+  profile 	= "AWS_PROFILE"
+  shared_credentials_file = "AWS_PROFILE_CONFIG_PATH"
+}
+
