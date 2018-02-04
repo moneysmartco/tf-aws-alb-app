@@ -2,7 +2,7 @@ variable "setup_target_group" {
   description = "Setup target group or not true|false"
   default = true
 }
-variable "setup_target_listener_rule" {
+variable "setup_listener_rule" {
   description = "Setup listener rules or not true|false"
   default = true
 }
