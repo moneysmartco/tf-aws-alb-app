@@ -1,6 +1,14 @@
-variable "setup" {
-  description = "Setup target group and listener rule or not true|false"
+variable "setup_target_group" {
+  description = "Setup target group or not true|false"
   default = true
+}
+variable "setup_target_listener_rule" {
+  description = "Setup listener rules or not true|false"
+  default = true
+}
+variable "app_target_group_arn" {
+  description = "Target group ARN when setup_target_group is false"
+  default = ""
 }
 variable "env" {
   default = ""
