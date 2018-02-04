@@ -1,29 +1,41 @@
-variable "setup_target_group" {
-  description = "Setup target group or not true|false"
-  default = true
-}
-variable "setup_listener_rule" {
-  description = "Setup listener rules or not true|false"
-  default = true
-}
-variable "app_target_group_arn" {
-  description = "Target group ARN when setup_target_group is false"
+# General
+variable "vpc_id" {
   default = ""
 }
 variable "env" {
   default = ""
 }
-variable "vpc_id" {
-  default = ""
-}
 variable "app_name" {
   default = ""
 }
-variable "app_target_id" {
-  description = " The ID of the target. This is the Instance ID for an instance, or the container ID for an ECS container. If the target type is ip, specify an IP address."
-  default = ""
+# Target Group
+variable "setup_target_group" {
+  description = "Setup the target group or not true|false"
+  default = true
 }
-# Healthcheck
+variable "target_group_port" {
+  description = "Port to route traffic from LB to target group"
+  default = 80
+}
+variable "target_group_protocol" {
+  description = "The protocol the load balancer uses when routing traffic to targets in this target group (HTTP|HTTPS|TCP)"
+  default = "HTTP"
+}
+variable "target_type" {
+  description = "instance or ip"
+  default = "instance"
+}
+variable "stickiness_enabled" {
+  default = false
+}
+variable "stickiness_type" {
+  description = "The type of sticky sessions. The only current possible value is lb_cookie"
+  default = "lb_cookie"
+}
+variable "stickiness_cookie_duration" {
+  description = "The time period, in seconds, during which requests from a client should be routed to the same target"
+  default = 86400
+}
 variable "health_check_path" {
   default = "/"
 }
@@ -42,11 +54,35 @@ variable "health_check_interval" {
 variable "health_check_port" {
   default = 80
 }
-# Listerner
-variable "alb_listener_http_arn"    {
+variable "health_check_protocol" {
+  description = "The protocol the load balancer uses when performing health checks on targets in this target group (HTTP|HTTPS)"
+  default = "HTTP"
+}
+variable "health_check_matcher" {
+  description = "The HTTP codes to use when checking for a successful response from a target. You can specify multiple values (200,202) or a range of values (200-299)."
+  default = 200
+}
+# Attachment
+variable "app_target_port" {
+  description = "The port on which targets receive traffic"
+  default = 80
+}
+variable "app_target_id" {
+  description = " The ID of the target. This is the Instance ID for an instance, or the container ID for an ECS container. If the target type is ip, specify an IP address."
   default = ""
 }
-variable "alb_listener_https_arn"   {
+# Listener Rule
+variable "setup_listener_rule" {
+  description = "Setup the listener rules or not true|false"
+  default = true
+}
+variable "app_target_group_arn" {
+  default = ""
+}
+variable "alb_listener_http_arn" {
+  default = ""
+}
+variable "alb_listener_https_arn" {
   default = ""
 }
 variable "domain_priority_init" {
