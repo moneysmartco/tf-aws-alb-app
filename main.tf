@@ -1,6 +1,7 @@
 resource "aws_alb_target_group" "app" {
   count       = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
-  name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
+  # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
+  name        = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
   port        = "${var.target_group_port}"
   protocol    = "${var.target_group_protocol}"
   vpc_id      = "${var.vpc_id}"
