@@ -13,6 +13,14 @@ variable "setup_target_group" {
   description = "Setup the target group or not true|false"
   default = true
 }
+variable "enable_http_rules" {
+  description = "Create http rules or not, default false"
+  default = false
+}
+variable "enable_https_rules" {
+  description = "Create https rules or not, default true"
+  default = true
+}
 variable "target_group_port" {
   description = "Port to route traffic from LB to target group"
   default = 80
