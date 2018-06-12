@@ -70,6 +70,10 @@ variable "health_check_matcher" {
   description = "The HTTP codes to use when checking for a successful response from a target. You can specify multiple values (200,202) or a range of values (200-299)."
   default = 200
 }
+variable "target_group_deregistration_delay" {
+  description = "Seconds to be delayed when the target is in draining state"
+  default = 60
+}
 # Attachment
 variable "app_target_port" {
   description = "The port on which targets receive traffic"

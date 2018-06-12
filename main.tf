@@ -7,6 +7,8 @@ resource "aws_alb_target_group" "app" {
   vpc_id      = "${var.vpc_id}"
   # target_type = "${var.target_type}"
 
+  deregistration_delay = "${var.target_group_deregistration_delay}"
+
   health_check {
     healthy_threshold   = "${var.health_check_healthy_threshold}"
     unhealthy_threshold = "${var.health_check_unhealthy_threshold}"
