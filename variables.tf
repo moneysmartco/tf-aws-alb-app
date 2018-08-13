@@ -51,13 +51,13 @@ variable "health_check_healthy_threshold" {
   default = 2
 }
 variable "health_check_unhealthy_threshold" {
-  default = 3
+  default = 5
 }
 variable "health_check_timeout" {
   default = 5
 }
 variable "health_check_interval" {
-  default = 10
+  default = 20
 }
 variable "health_check_port" {
   default = 80
