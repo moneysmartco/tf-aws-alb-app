@@ -1,7 +1,7 @@
 resource "aws_alb_target_group" "app" {
   count       = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
   # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
-  name        = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
+  name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}" # Target group name is 32 characters max
   port        = "${var.target_group_port}"
   protocol    = "${var.target_group_protocol}"
   vpc_id      = "${var.vpc_id}"
@@ -27,7 +27,7 @@ resource "aws_alb_target_group" "app" {
   }
 
   tags {
-    Name        = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}",
+    Name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}" # Target group name is 32 characters max
     Project     = "${var.app_name}",
     Environment = "${var.env != "" ? var.env : "test"}",
     Layer       = "target-group",
