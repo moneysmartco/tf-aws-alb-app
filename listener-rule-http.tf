@@ -56,12 +56,12 @@ resource "aws_alb_listener_rule" "domain_and_url_http" {
 
   condition {
     field  = "host-header"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    values = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
     field  = "path-pattern"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    values = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {
@@ -81,12 +81,12 @@ resource "aws_alb_listener_rule" "domain_and_url_http_custom" {
 
   condition {
     field  = "host-header"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    values = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
     field  = "path-pattern"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    values = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {

@@ -42,6 +42,13 @@ resource "aws_alb_listener_rule" "domain_https_custom" {
 }
 #----------------------------------------
 # Domain & URL Mixed Config
+# This resource will only cater for a unqiue host-header with one or more path-pattern
+#
+# For domains_and_urls
+# Ensure it is in the following format
+# {path-pattern-a=host-header-1 path-pattern-b=host-header-1}
+# i.e
+# {"/home-loan*"="staging3.mssgdev.com" "/refinancing*"="staging3.mssgdev.com"}
 #----------------------------------------
 resource "aws_alb_listener_rule" "domain_and_url_https" {
   count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.domains_and_urls) : 0}"
@@ -55,12 +62,12 @@ resource "aws_alb_listener_rule" "domain_and_url_https" {
 
   condition {
     field  = "host-header"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    values = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
     field  = "path-pattern"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    values = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {
@@ -80,12 +87,12 @@ resource "aws_alb_listener_rule" "domain_and_url_https_custom" {
 
   condition {
     field  = "host-header"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    values = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
     field  = "path-pattern"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    values = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {
