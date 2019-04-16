@@ -1,6 +1,7 @@
 #----------------------------------------
 # Domain Config
 #----------------------------------------
+// Target group created inside module
 resource "aws_alb_listener_rule" "domain_http" {
   count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group ? length(var.domains) : 0}"
   listener_arn = "${var.alb_listener_http_arn}"
@@ -21,6 +22,7 @@ resource "aws_alb_listener_rule" "domain_http" {
   }
 }
 
+// Target group passed from caller
 resource "aws_alb_listener_rule" "domain_http_custom" {
   count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group == 0 ? length(var.domains) : 0}"
 
@@ -35,6 +37,72 @@ resource "aws_alb_listener_rule" "domain_http_custom" {
   condition {
     field  = "host-header"
     values = ["${element(var.domains, count.index)}"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+#----------------------------------------
+# Domain Config (cognito)
+#----------------------------------------
+// Target group created inside module
+resource "aws_alb_listener_rule" "cognito_domain_http" {
+  count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group ? length(var.cognito_domains) : 0}"
+  listener_arn = "${var.alb_listener_http_arn}"
+  priority     = "${var.cognito_domain_priority_init + count.index}"
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.app.arn}"
+  }
+
+  action {
+    type = "authenticate-cognito"
+
+    authenticate_cognito {
+      user_pool_arn       = "${var.cognito_user_pool_arn}"
+      user_pool_client_id = "${var.cognito_user_pool_client_id}"
+      user_pool_domain    = "${var.cognito_user_pool_domain}"
+    }
+  }
+
+  condition {
+    field  = "host-header"
+    values = ["${element(var.cognito_domains, count.index)}"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+// Target group passed from caller
+resource "aws_alb_listener_rule" "cognito_domain_http_custom" {
+  count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group == 0 ? length(var.cognito_domains) : 0}"
+
+  listener_arn = "${var.alb_listener_http_arn}"
+  priority     = "${var.cognito_domain_priority_init + count.index}"
+
+  action {
+    type             = "forward"
+    target_group_arn = "${var.app_target_group_arn}"
+  }
+
+  action {
+    type = "authenticate-cognito"
+
+    authenticate_cognito {
+      user_pool_arn       = "${var.cognito_user_pool_arn}"
+      user_pool_client_id = "${var.cognito_user_pool_client_id}"
+      user_pool_domain    = "${var.cognito_user_pool_domain}"
+    }
+  }
+
+  condition {
+    field  = "host-header"
+    values = ["${element(var.cognito_domains, count.index)}"]
   }
 
   lifecycle {
@@ -103,6 +171,7 @@ resource "aws_alb_listener_rule" "domain_and_url_http_custom" {
 #----------------------------------------
 # URL Config
 #----------------------------------------
+// Target group created inside module
 resource "aws_alb_listener_rule" "url_http" {
   count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group ? length(var.urls) : 0}"
   listener_arn = "${var.alb_listener_http_arn}"
@@ -123,6 +192,7 @@ resource "aws_alb_listener_rule" "url_http" {
   }
 }
 
+// Target group passed from caller
 resource "aws_alb_listener_rule" "url_http_custom" {
   count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group == 0 ? length(var.urls) : 0}"
   listener_arn = "${var.alb_listener_http_arn}"
@@ -136,6 +206,51 @@ resource "aws_alb_listener_rule" "url_http_custom" {
   condition {
     field  = "path-pattern"
     values = ["${element(var.urls, count.index)}"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+#----------------------------------------
+# URL Config (cognito)
+#----------------------------------------
+// Target group created inside module
+resource "aws_alb_listener_rule" "cognito_url_http" {
+  count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group ? length(var.cognito_urls) : 0}"
+  listener_arn = "${var.alb_listener_http_arn}"
+  priority     = "${var.cognito_url_priority_init + count.index}"
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.app.arn}"
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["${element(var.cognito_urls, count.index)}"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+// Target group passed from caller
+resource "aws_alb_listener_rule" "cognito_url_http_custom" {
+  count        = "${var.setup_listener_rule && var.enable_http_rules && var.setup_target_group == 0 ? length(var.cognito_urls) : 0}"
+  listener_arn = "${var.alb_listener_http_arn}"
+  priority     = "${var.cognito_url_priority_init + count.index}"
+
+  action {
+    type             = "forward"
+    target_group_arn = "${var.app_target_group_arn}"
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["${element(var.cognito_urls, count.index)}"]
   }
 
   lifecycle {

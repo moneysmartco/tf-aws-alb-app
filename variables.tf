@@ -120,3 +120,35 @@ variable "urls" {
   type = "list"
   default = []
 }
+
+# Cognito config
+variable "cognito_user_pool_arn" {
+  default = ""
+}
+
+variable "cognito_user_pool_client_id" {
+  default = ""
+}
+
+variable "cognito_user_pool_domain" {
+  default = ""
+}
+
+# Listener Rule (cognito)
+variable "cognito_domains" {
+  type = "list"
+  default = []
+}
+
+variable "cognito_domain_priority_init" {
+  default = 5
+}
+
+variable "cognito_urls" {
+  type = "list"
+  default = []
+}
+
+variable "cognito_url_priority_init" {
+  default = 15
+}
