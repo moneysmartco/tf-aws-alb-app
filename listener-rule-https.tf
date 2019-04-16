@@ -53,11 +53,6 @@ resource "aws_alb_listener_rule" "cognito_domain_https" {
   priority     = "${var.cognito_domain_priority_init + count.index}"
 
   action {
-    type             = "forward"
-    target_group_arn = "${aws_alb_target_group.app.arn}"
-  }
-
-  action {
     type = "authenticate-cognito"
 
     authenticate_cognito {
@@ -65,6 +60,11 @@ resource "aws_alb_listener_rule" "cognito_domain_https" {
       user_pool_client_id = "${var.cognito_user_pool_client_id}"
       user_pool_domain    = "${var.cognito_user_pool_domain}"
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.app.arn}"
   }
 
   condition {
@@ -84,11 +84,6 @@ resource "aws_alb_listener_rule" "cognito_domain_https_custom" {
   priority     = "${var.cognito_domain_priority_init + count.index}"
 
   action {
-    type             = "forward"
-    target_group_arn = "${var.app_target_group_arn}"
-  }
-
-  action {
     type = "authenticate-cognito"
 
     authenticate_cognito {
@@ -96,6 +91,11 @@ resource "aws_alb_listener_rule" "cognito_domain_https_custom" {
       user_pool_client_id = "${var.cognito_user_pool_client_id}"
       user_pool_domain    = "${var.cognito_user_pool_domain}"
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = "${var.app_target_group_arn}"
   }
 
   condition {
@@ -223,11 +223,6 @@ resource "aws_alb_listener_rule" "cognito_url_https" {
   priority     = "${var.cognito_url_priority_init + count.index}"
 
   action {
-    type             = "forward"
-    target_group_arn = "${aws_alb_target_group.app.arn}"
-  }
-
-  action {
     type = "authenticate-cognito"
 
     authenticate_cognito {
@@ -235,6 +230,11 @@ resource "aws_alb_listener_rule" "cognito_url_https" {
       user_pool_client_id = "${var.cognito_user_pool_client_id}"
       user_pool_domain    = "${var.cognito_user_pool_domain}"
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.app.arn}"
   }
 
   condition {
@@ -254,11 +254,6 @@ resource "aws_alb_listener_rule" "cognito_url_https_custom" {
   priority     = "${var.cognito_url_priority_init + count.index}"
 
   action {
-    type             = "forward"
-    target_group_arn = "${var.app_target_group_arn}"
-  }
-
-  action {
     type = "authenticate-cognito"
 
     authenticate_cognito {
@@ -266,6 +261,11 @@ resource "aws_alb_listener_rule" "cognito_url_https_custom" {
       user_pool_client_id = "${var.cognito_user_pool_client_id}"
       user_pool_domain    = "${var.cognito_user_pool_domain}"
     }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = "${var.app_target_group_arn}"
   }
 
   condition {
