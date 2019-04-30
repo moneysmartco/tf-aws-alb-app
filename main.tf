@@ -1,7 +1,30 @@
+locals {
+  # env tag in map structure
+  env_tag = { Environment = "${var.env}" }
+
+  # project tag in map structure
+  project_tag = { Project = "${var.app_name}" }
+
+  # target group name tag in map structure
+  target_group_name_tag = { Name = "${var.app_name}-${var.env}" }
+
+  #------------------------------------------------------------
+  # variables that will be mapped to the various resource block
+  #------------------------------------------------------------
+
+  # target group tags
+  target_group_tags = "${merge(var.tags, local.env_tag, local.project_tag, local.target_group_name_tag)}"
+}
+
+
+#--------------------
+# Target Group
+#--------------------
 resource "aws_alb_target_group" "app" {
   count       = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
   # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
-  name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}" # Target group name is 32 characters max
+  # Target group name is 32 characters max
+  name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}"
   port        = "${var.target_group_port}"
   protocol    = "${var.target_group_protocol}"
   vpc_id      = "${var.vpc_id}"
@@ -26,13 +49,16 @@ resource "aws_alb_target_group" "app" {
     cookie_duration = "${var.stickiness_cookie_duration}"
   }
 
-  tags {
-    Name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}" # Target group name is 32 characters max
-    Project     = "${var.app_name}",
-    Environment = "${var.env != "" ? var.env : "test"}",
-    Layer       = "target-group",
-    Type        = "target-group"
-  }
+  #tags {
+  #  # Target group name is 32 characters max
+  #  Name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}"
+  #  Project     = "${var.app_name}",
+  #  Environment = "${var.env != "" ? var.env : "test"}",
+  #  Layer       = "target-group",
+  #  Type        = "target-group"
+  #}
+
+  tags = "${local.target_group_tags}"
 
   lifecycle {
     create_before_destroy = true
