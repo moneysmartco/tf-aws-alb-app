@@ -8,6 +8,23 @@ variable "env" {
 variable "app_name" {
   default = ""
 }
+
+variable "tags" {
+  description = "Tagging resources with default values"
+  default = {
+    "Name" = ""
+    "Country" = ""
+    "Environment" = ""
+    "Repository" = ""
+    "Owner" = ""
+    "Department" = ""
+    "Team" = "shared"
+    "Product" = "common"
+    "Project" = "common"
+    "Stack" = ""
+  }
+}
+
 # Target Group
 variable "setup_target_group" {
   description = "Setup the target group or not true|false"
