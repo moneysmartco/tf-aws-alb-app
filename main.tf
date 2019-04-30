@@ -30,6 +30,8 @@ resource "aws_alb_target_group" "app" {
   vpc_id      = "${var.vpc_id}"
   # target_type = "${var.target_type}"
 
+  tags = "${local.target_group_tags}"
+
   deregistration_delay = "${var.target_group_deregistration_delay}"
 
   health_check {
@@ -48,17 +50,6 @@ resource "aws_alb_target_group" "app" {
     type    = "${var.stickiness_type}"
     cookie_duration = "${var.stickiness_cookie_duration}"
   }
-
-  #tags {
-  #  # Target group name is 32 characters max
-  #  Name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}"
-  #  Project     = "${var.app_name}",
-  #  Environment = "${var.env != "" ? var.env : "test"}",
-  #  Layer       = "target-group",
-  #  Type        = "target-group"
-  #}
-
-  tags = "${local.target_group_tags}"
 
   lifecycle {
     create_before_destroy = true
