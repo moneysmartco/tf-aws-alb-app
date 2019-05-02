@@ -169,3 +169,12 @@ variable "cognito_urls" {
 variable "cognito_url_priority_init" {
   default = 15
 }
+
+variable "cognito_domains_and_urls" {
+  type    = "map"
+  default = {}
+}
+
+variable "cognito_domain_and_url_priority_init" {
+  default = 15
+}
