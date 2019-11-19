@@ -135,13 +135,11 @@ resource "aws_alb_listener_rule" "domain_and_url_http" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {
@@ -162,13 +160,11 @@ resource "aws_alb_listener_rule" "domain_and_url_http_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header = ["${element(values(var.domains_and_urls), count.index)}"]
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern = ["${element(keys(var.domains_and_urls), count.index)}"]
   }
 
   lifecycle {
@@ -199,13 +195,11 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_http" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
   }
 
   lifecycle {
@@ -236,13 +230,11 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_http_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
   }
 
   lifecycle {
