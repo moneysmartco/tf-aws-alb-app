@@ -15,11 +15,7 @@ resource "aws_alb_listener_rule" "domain_http" {
   }
 
   condition {
-    field = "host-header"
-
-    host_header {
-      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
-    }
+    host_header = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -41,11 +37,7 @@ resource "aws_alb_listener_rule" "domain_http_custom" {
   }
 
   condition {
-    field = "host-header"
-
-    host_header {
-      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
-    }
+    host_header = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -80,11 +72,7 @@ resource "aws_alb_listener_rule" "cognito_domain_http" {
   }
 
   condition {
-    field = "host-header"
-
-    host_header {
-      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
-    }
+    host_header = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -116,11 +104,7 @@ resource "aws_alb_listener_rule" "cognito_domain_http_custom" {
   }
 
   condition {
-    field = "host-header"
-
-    host_header {
-      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
-    }
+    host_header = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -283,11 +267,7 @@ resource "aws_alb_listener_rule" "url_http" {
   }
 
   condition {
-    field = "path-pattern"
-
-    path_pattern {
-      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
-    }
+    path_pattern = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -309,11 +289,7 @@ resource "aws_alb_listener_rule" "url_http_custom" {
   }
 
   condition {
-    field = "path-pattern"
-
-    path_pattern {
-      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
-    }
+    path_pattern = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -348,11 +324,7 @@ resource "aws_alb_listener_rule" "cognito_url_http" {
   }
 
   condition {
-    field = "path-pattern"
-
-    path_pattern {
-      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
-    }
+    path_pattern = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
   }
 
   lifecycle {
@@ -384,11 +356,7 @@ resource "aws_alb_listener_rule" "cognito_url_http_custom" {
   }
 
   condition {
-    field = "path-pattern"
-
-    path_pattern {
-      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
-    }
+    path_pattern = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
   }
 
   lifecycle {
