@@ -15,7 +15,9 @@ resource "aws_alb_listener_rule" "domain_https" {
   }
 
   condition {
-    host_header = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    host_header {
+      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -37,7 +39,9 @@ resource "aws_alb_listener_rule" "domain_https_custom" {
   }
 
   condition {
-    host_header = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    host_header {
+      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -72,7 +76,9 @@ resource "aws_alb_listener_rule" "cognito_domain_https" {
   }
 
   condition {
-    host_header = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    host_header {
+      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -104,7 +110,9 @@ resource "aws_alb_listener_rule" "cognito_domain_https_custom" {
   }
 
   condition {
-    host_header = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    host_header {
+      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -135,11 +143,15 @@ resource "aws_alb_listener_rule" "domain_and_url_https" {
   }
 
   condition {
-    host_header = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    path_pattern = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -160,11 +172,15 @@ resource "aws_alb_listener_rule" "domain_and_url_https_custom" {
   }
 
   condition {
-    host_header = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    path_pattern = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -195,11 +211,15 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_https" {
   }
 
   condition {
-    host_header = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    path_pattern = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -230,11 +250,15 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_https_custom" {
   }
 
   condition {
-    host_header = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    path_pattern = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -259,7 +283,9 @@ resource "aws_alb_listener_rule" "url_https" {
   }
 
   condition {
-    path_pattern = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    path_pattern {
+      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -281,7 +307,9 @@ resource "aws_alb_listener_rule" "url_https_custom" {
   }
 
   condition {
-    path_pattern = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    path_pattern {
+      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -316,7 +344,9 @@ resource "aws_alb_listener_rule" "cognito_url_https" {
   }
 
   condition {
-    path_pattern = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    path_pattern {
+      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -348,7 +378,9 @@ resource "aws_alb_listener_rule" "cognito_url_https_custom" {
   }
 
   condition {
-    path_pattern = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    path_pattern {
+      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
