@@ -1,12 +1,18 @@
 locals {
   # env tag in map structure
-  env_tag = { Environment = "${var.env}" }
+  env_tag = {
+    Environment = "${var.env}"
+  }
 
   # project tag in map structure
-  project_tag = { Project = "${var.app_name}" }
+  project_tag = {
+    Project = "${var.app_name}"
+  }
 
   # target group name tag in map structure
-  target_group_name_tag = { Name = "${var.app_name}-${var.env}" }
+  target_group_name_tag = {
+    Name = "${var.app_name}-${var.env}"
+  }
 
   #------------------------------------------------------------
   # variables that will be mapped to the various resource block
@@ -16,24 +22,24 @@ locals {
   target_group_tags = "${merge(var.tags, local.env_tag, local.project_tag, local.target_group_name_tag)}"
 }
 
-
 #--------------------
 # Target Group
 #--------------------
 resource "aws_alb_target_group" "app" {
-  count       = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
+  count = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
+
   # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
   # Target group name is 32 characters max
-  name        = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}"
-  port        = "${var.target_group_port}"
-  protocol    = "${var.target_group_protocol}"
-  vpc_id      = "${var.vpc_id}"
+  name = "${replace("${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}", "/(.{0,32})(.*)/", "$1")}"
+
+  port     = "${var.target_group_port}"
+  protocol = "${var.target_group_protocol}"
+  vpc_id   = "${var.vpc_id}"
+
   # target_type = "${var.target_type}"
 
-  tags = "${local.target_group_tags}"
-
+  tags                 = "${local.target_group_tags}"
   deregistration_delay = "${var.target_group_deregistration_delay}"
-
   health_check {
     healthy_threshold   = "${var.health_check_healthy_threshold}"
     unhealthy_threshold = "${var.health_check_unhealthy_threshold}"
@@ -44,13 +50,11 @@ resource "aws_alb_target_group" "app" {
     protocol            = "${var.health_check_protocol}"
     matcher             = "${var.health_check_matcher}"
   }
-
   stickiness {
-    enabled = "${var.stickiness_enabled}"
-    type    = "${var.stickiness_type}"
+    enabled         = "${var.stickiness_enabled}"
+    type            = "${var.stickiness_type}"
     cookie_duration = "${var.stickiness_cookie_duration}"
   }
-
   lifecycle {
     create_before_destroy = true
   }

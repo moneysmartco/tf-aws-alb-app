@@ -3,7 +3,7 @@
 #----------------------------------------
 // Target group created inside module
 resource "aws_alb_listener_rule" "domain_https" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.domains) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.domains)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.domain_priority_init + count.index}"
 
@@ -13,8 +13,9 @@ resource "aws_alb_listener_rule" "domain_https" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(var.domains, count.index)}"]
+    host_header {
+      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -24,7 +25,7 @@ resource "aws_alb_listener_rule" "domain_https" {
 
 // Target group passed from caller
 resource "aws_alb_listener_rule" "domain_https_custom" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? length(var.domains) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? ceil(length(var.domains)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.domain_priority_init + count.index}"
 
@@ -34,8 +35,9 @@ resource "aws_alb_listener_rule" "domain_https_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(var.domains, count.index)}"]
+    host_header {
+      values = ["${slice(var.domains, count.index*5, min(length(var.domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -48,7 +50,7 @@ resource "aws_alb_listener_rule" "domain_https_custom" {
 #----------------------------------------
 // Target group created inside module
 resource "aws_alb_listener_rule" "cognito_domain_https" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.cognito_domains) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.cognito_domains)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.cognito_domain_priority_init + count.index}"
 
@@ -68,8 +70,9 @@ resource "aws_alb_listener_rule" "cognito_domain_https" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(var.cognito_domains, count.index)}"]
+    host_header {
+      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -79,7 +82,7 @@ resource "aws_alb_listener_rule" "cognito_domain_https" {
 
 // Target group passed from caller
 resource "aws_alb_listener_rule" "cognito_domain_https_custom" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? length(var.cognito_domains) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? ceil(length(var.cognito_domains)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.cognito_domain_priority_init + count.index}"
 
@@ -99,15 +102,15 @@ resource "aws_alb_listener_rule" "cognito_domain_https_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(var.cognito_domains, count.index)}"]
+    host_header {
+      values = ["${slice(var.cognito_domains, count.index*5, min(length(var.cognito_domains), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
-
 
 #----------------------------------------
 # Domain & URL Mixed Config
@@ -130,13 +133,15 @@ resource "aws_alb_listener_rule" "domain_and_url_https" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -155,19 +160,22 @@ resource "aws_alb_listener_rule" "domain_and_url_https_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
+
 resource "aws_alb_listener_rule" "cognito_domain_and_url_https" {
   count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.cognito_domains_and_urls) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
@@ -189,13 +197,15 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_https" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
@@ -224,25 +234,28 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_https_custom" {
   }
 
   condition {
-    field  = "host-header"
-    values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    host_header {
+      values = ["${element(values(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    path_pattern {
+      values = ["${element(keys(var.cognito_domains_and_urls), count.index)}"]
+    }
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
+
 #----------------------------------------
 # URL Config
 #----------------------------------------
 // Target group created inside module
 resource "aws_alb_listener_rule" "url_https" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.urls) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.urls)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.url_priority_init + count.index}"
 
@@ -252,8 +265,9 @@ resource "aws_alb_listener_rule" "url_https" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(var.urls, count.index)}"]
+    path_pattern {
+      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -263,7 +277,7 @@ resource "aws_alb_listener_rule" "url_https" {
 
 // Target group passed from caller
 resource "aws_alb_listener_rule" "url_https_custom" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? length(var.urls) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? ceil(length(var.urls)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.url_priority_init + count.index}"
 
@@ -273,8 +287,9 @@ resource "aws_alb_listener_rule" "url_https_custom" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(var.urls, count.index)}"]
+    path_pattern {
+      values = ["${slice(var.urls, count.index*5, min(length(var.urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -287,7 +302,7 @@ resource "aws_alb_listener_rule" "url_https_custom" {
 #----------------------------------------
 // Target group created inside module
 resource "aws_alb_listener_rule" "cognito_url_https" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? length(var.cognito_urls) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.cognito_urls)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.cognito_url_priority_init + count.index}"
 
@@ -307,8 +322,9 @@ resource "aws_alb_listener_rule" "cognito_url_https" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(var.cognito_urls, count.index)}"]
+    path_pattern {
+      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
@@ -318,7 +334,7 @@ resource "aws_alb_listener_rule" "cognito_url_https" {
 
 // Target group passed from caller
 resource "aws_alb_listener_rule" "cognito_url_https_custom" {
-  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? length(var.cognito_urls) : 0}"
+  count        = "${var.setup_listener_rule && var.enable_https_rules && var.setup_target_group == 0 ? ceil(length(var.cognito_urls)/5.0) : 0}"
   listener_arn = "${var.alb_listener_https_arn}"
   priority     = "${var.cognito_url_priority_init + count.index}"
 
@@ -338,8 +354,9 @@ resource "aws_alb_listener_rule" "cognito_url_https_custom" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["${element(var.cognito_urls, count.index)}"]
+    path_pattern {
+      values = ["${slice(var.cognito_urls, count.index*5, min(length(var.cognito_urls), (count.index+1)*5))}"]
+    }
   }
 
   lifecycle {
