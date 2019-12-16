@@ -26,8 +26,6 @@ locals {
 # Target Group
 #--------------------
 resource "aws_alb_target_group" "app" {
-  provider = "aws-advanced-rules"
-
   count = "${var.app_name != "" && var.setup_target_group ? 1 : 0}"
 
   # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
@@ -40,7 +38,7 @@ resource "aws_alb_target_group" "app" {
 
   # target_type = "${var.target_type}"
 
-  tags = "${local.target_group_tags}"
+  tags                 = "${local.target_group_tags}"
   deregistration_delay = "${var.target_group_deregistration_delay}"
   health_check {
     healthy_threshold   = "${var.health_check_healthy_threshold}"
@@ -63,8 +61,6 @@ resource "aws_alb_target_group" "app" {
 }
 
 resource "aws_alb_target_group_attachment" "app" {
-  provider = "aws-advanced-rules"
-
   count            = "${var.app_target_id != "" && var.setup_target_group ? 1 : 0}"
   target_group_arn = "${aws_alb_target_group.app.arn}"
   target_id        = "${var.app_target_id}"
