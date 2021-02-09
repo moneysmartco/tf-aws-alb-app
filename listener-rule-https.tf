@@ -303,7 +303,7 @@ resource "aws_alb_listener_rule" "cognito_domain_and_url_https_custom" {
 #----------------------------------------
 // Target group created inside module
 resource "aws_alb_listener_rule" "url_https" {
-  count        = var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.urls) / 5) : 0
+  count        = var.setup_listener_rule && var.enable_https_rules && var.setup_target_group ? ceil(length(var.urls) / 6) : 0
   listener_arn = var.alb_listener_https_arn
   priority     = var.url_priority_init + count.index
 
@@ -317,7 +317,7 @@ resource "aws_alb_listener_rule" "url_https" {
       values = slice(
         var.urls,
         count.index * 6,
-        min(length(var.urls), count.index + 1 * 5),
+        min(length(var.urls), count.index + 1 * 6),
       )
     }
   }
