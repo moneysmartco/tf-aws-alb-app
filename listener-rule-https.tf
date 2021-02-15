@@ -316,8 +316,8 @@ resource "aws_alb_listener_rule" "url_https" {
     path_pattern {
       values = slice(
         var.urls,
-        count.index * 7,
-        min(length(var.urls), count.index + 1 * 5),
+        count.index * 7
+        min(length(var.urls), count.index + 1 * 7),
       )
     }
   }
