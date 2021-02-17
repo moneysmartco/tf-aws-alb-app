@@ -317,7 +317,7 @@ resource "aws_alb_listener_rule" "url_https" {
       values = slice(
         var.urls,
         count.index * 5,
-        min(length(var.urls), count.index + 1 * 5),
+        min(length(var.urls), count.index + 1 * 5)
       )
     }
   }
