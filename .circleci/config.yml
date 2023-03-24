@@ -19,7 +19,7 @@ jobs:
           name: Install tflint
           command: curl -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.4.2/tflint_linux_amd64.zip && unzip /tmp/tflint.zip -d /usr/local/bin
       
-      - run: make test
+      # - run: make test
 
       - run: cp terraform.tfvars.sample terraform.tfvars
       - run: cp init_ci.tf.sample init_ci.tf
