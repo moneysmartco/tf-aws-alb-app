@@ -1,41 +1,61 @@
-version: 2
-
-terraform: &terraform
-  docker:
-    - image: hashicorp/terraform:0.11.7
-  working_directory: ~/repo
-
+version: 2.1
+orbs:
+  terraform: "circleci/terraform@3.1.0"
+  moneysmart-orb: moneysmartco/circleci-orb@0.0.39
+  aws-cli: circleci/aws-cli@3.1
+default-image: &default-image
+  machine:
+    image: "ubuntu-2004:2022.04.1"
+    docker_layer_caching: true
 jobs:
-  validate:
-    <<: *terraform
+#-----------------
+# PullRequest
+#-----------------
+  tf_lint:
+    <<: *default-image
     steps:
       - checkout
-
-      - run:
-          name: Add make to Alpine
-          command: apk add --update make
-      
+      - attach_workspace:
+          at: /tmp/workspace
+      - terraform/install:
+          terraform_version: 0.13.5
       - run:
           name: Install tflint
-          command: curl -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.4.2/tflint_linux_amd64.zip && unzip /tmp/tflint.zip -d /usr/local/bin
-      
-      - run: make test
-
-      - run: cp terraform.tfvars.sample terraform.tfvars
-      - run: cp init_ci.tf.sample init_ci.tf
-      - run: terraform init
-      - run: terraform plan
-      
-      - persist_to_workspace:
-          root: .
-          paths: .
-
-      - store_artifacts:
-          path: reports
-          destination: reports
-
+          command: |
+            curl -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.45.0/tflint_linux_amd64.zip && unzip /tmp/tflint.zip -d /usr/local/bin
+      - run:
+          name: tf fmt
+          command: |
+            terraform fmt -check=true -diff=true
+            tflint
+  tf_validate:
+    <<: *default-image
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/workspace
+      - terraform/install:
+          terraform_version: 0.13.5
+      - run:
+          name: tf validate, init & plan
+          command: |
+            terraform validate
 workflows:
-  version: 2
-  build:
+  pr-steps:
     jobs:
-      - validate
+      - tf_lint:
+          context: terraform
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
+      - tf_validate:
+          context: terraform
+          requires:
+            - tf_lint
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
