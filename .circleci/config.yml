@@ -39,6 +39,9 @@ jobs:
       - run:
           name: tf validate, init & plan
           command: |
+            cp terraform.tfvars.sample terraform.tfvars
+            cp init_ci.tf.sample init_ci.tf
+            terraform init
             terraform validate
 workflows:
   pr-steps:
