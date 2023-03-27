@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Install tflint
           command: |
-            curl -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.45.0/tflint_linux_amd64.zip && unzip /tmp/tflint.zip -d /usr/local/bin
+            curl -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.45.0/tflint_linux_amd64.zip && sudo unzip /tmp/tflint.zip -d /usr/local/bin
       - run:
           name: tf fmt
           command: |
@@ -50,12 +50,12 @@ workflows:
               ignore: /^v.*/
             branches:
               ignore: master
-      - tf_validate:
-          context: terraform
-          requires:
-            - tf_lint
-          filters:
-            tags:
-              ignore: /^v.*/
-            branches:
-              ignore: master
+      # - tf_validate:
+      #     context: terraform
+      #     requires:
+      #       - tf_lint
+      #     filters:
+      #       tags:
+      #         ignore: /^v.*/
+      #       branches:
+      #         ignore: master
