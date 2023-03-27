@@ -26,7 +26,7 @@ jobs:
       - run:
           name: tf fmt
           command: |
-            #terraform fmt -check=true -diff=true
+            terraform fmt -check=true -diff=true
             tflint
   tf_validate:
     <<: *default-image
@@ -50,12 +50,12 @@ workflows:
               ignore: /^v.*/
             branches:
               ignore: master
-      # - tf_validate:
-      #     context: terraform
-      #     requires:
-      #       - tf_lint
-      #     filters:
-      #       tags:
-      #         ignore: /^v.*/
-      #       branches:
-      #         ignore: master
+      - tf_validate:
+          context: terraform
+          requires:
+            - tf_lint
+          filters:
+            tags:
+              ignore: /^v.*/
+            branches:
+              ignore: master
