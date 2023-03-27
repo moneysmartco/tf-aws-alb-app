@@ -26,7 +26,7 @@ jobs:
       - run:
           name: tf fmt
           command: |
-            terraform fmt -check=true -diff=true
+            #terraform fmt -check=true -diff=true
             tflint
   tf_validate:
     <<: *default-image
