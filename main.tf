@@ -69,10 +69,3 @@ resource "aws_alb_target_group" "app" {
   }
 }
 
-resource "aws_alb_target_group_attachment" "app" {
-  count            = var.app_target_id != "" && var.setup_target_group ? 1 : 0
-  target_group_arn = aws_alb_target_group.app[0].arn
-  target_id        = var.app_target_id
-  port             = var.app_target_port
-}
-
