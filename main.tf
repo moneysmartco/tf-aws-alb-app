@@ -37,7 +37,7 @@ resource "aws_alb_target_group" "app" {
   # Target group name is 32 characters max
   name = replace(
     var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
-    "/(.{0,32})(.*)-$/",
+    "/(.{0,29})(.*)-$/",
     "$1$2",
   )
 
