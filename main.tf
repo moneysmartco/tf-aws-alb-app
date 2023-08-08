@@ -3,7 +3,7 @@ locals {
   env_tag = {
     Environment = var.env
   }
-truncated_name = substr(
+  truncated_name = substr(
     replace(
       var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
       "-$",
@@ -12,7 +12,6 @@ truncated_name = substr(
     0,
     32
   )
-}
   # project tag in map structure
   project_tag = {
     Project = var.app_name
