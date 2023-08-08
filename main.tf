@@ -41,7 +41,6 @@ resource "aws_alb_target_group" "app" {
     "$1$2"
   )
 
-  name = replace(name, "-$", "")
   port     = var.target_group_port
   protocol = var.target_group_protocol
   vpc_id   = var.vpc_id
