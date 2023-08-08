@@ -7,6 +7,9 @@ variable "env" {
   default = ""
 }
 
+variable "eks" {
+  default = "eks"
+}
 variable "app_name" {
   default = ""
 }
