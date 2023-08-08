@@ -38,12 +38,12 @@ resource "aws_alb_target_group" "app" {
   name = substr(
   replace(
     var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
-    "/-?$/",
+    "-$",
     ""
   ),
   0,
   32
-  )
+)
 
   port     = var.target_group_port
   protocol = var.target_group_protocol
