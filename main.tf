@@ -8,7 +8,7 @@ locals {
     "/(.{0,32})(.*)/",
     "$1",
   )
-  new_app_name = "${replace(local.name, "-", "")}"
+  new_app_name = "${replace(local.name, "-$", "")}"
   # project tag in map structure
   project_tag = {
     Project = var.app_name
