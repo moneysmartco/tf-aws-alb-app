@@ -37,9 +37,11 @@ resource "aws_alb_target_group" "app" {
   # Target group name is 32 characters max
   name = replace(
     var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
-    "/(.{0,32})(.*)/",
-    "$1",
+    "/(.{0,31})(.*[^-])/",
+    "$1$2"
   )
+
+  name = replace(name, "-$", "")
   port     = var.target_group_port
   protocol = var.target_group_protocol
   vpc_id   = var.vpc_id
