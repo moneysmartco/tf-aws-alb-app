@@ -3,7 +3,7 @@ locals {
   env_tag = {
     Environment = var.env
   }
-  truncated_app_name = substr(var.app_name, 0, 32)
+  truncated_app_name = substr(var.app_name, 0, 32 - length(var.eks))
   # project tag in map structure
   project_tag = {
     Project = var.app_name
