@@ -45,7 +45,7 @@ resource "aws_alb_target_group" "app" {
   protocol = var.target_group_protocol
   vpc_id   = var.vpc_id
 
-  # target_type = "${var.target_type}"
+  target_type = "ip"
 
   tags                 = local.target_group_tags
   deregistration_delay = var.target_group_deregistration_delay
