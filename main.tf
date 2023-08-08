@@ -3,7 +3,16 @@ locals {
   env_tag = {
     Environment = var.env
   }
-  truncated_app_name = substr(var.app_name, 0, 32 - length(var.eks))
+truncated_name = substr(
+    replace(
+      var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
+      "-$",
+      ""
+    ),
+    0,
+    32
+  )
+}
   # project tag in map structure
   project_tag = {
     Project = var.app_name
@@ -35,15 +44,7 @@ resource "aws_alb_target_group" "app" {
 
   # name_prefix = "${var.env != "" ? format("%s-%s", var.app_name, var.env) : var.app_name}"
   # Target group name is 32 characters max
-  name = substr(
-  replace(
-    var.env != "" ? format("%s-%s", var.eks, var.app_name) : var.app_name,
-    "-$",
-    ""
-  ),
-  0,
-  32
-)
+  name = local.truncated_name
 
   port     = var.target_group_port
   protocol = var.target_group_protocol
