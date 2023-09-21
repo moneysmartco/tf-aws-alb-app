@@ -9,7 +9,7 @@ resource "aws_alb_listener_rule" "domain_https" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.app[0].arn
+    target_group_arn = var.app_target_group_arn == "" ? aws_alb_target_group.app[0].arn : var.app_target_group_arn
   }
 
   condition {
